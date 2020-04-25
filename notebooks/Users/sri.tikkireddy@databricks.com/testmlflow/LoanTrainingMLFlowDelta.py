@@ -13,6 +13,7 @@ def inject_mlrun_params(mlflow):
     
 def get_mlrun_params():
   import os
+  import json
   if os.environ.get("PARAMS_JSON_STRING", None) != None:
     return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
   else:
