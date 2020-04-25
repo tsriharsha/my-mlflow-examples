@@ -53,7 +53,7 @@ def train_diabetes(in_alpha, in_l1_ratio):
 
     # Compute paths
     eps = 5e-3  # the smaller it is the longer is the path
-    path = "/dbfs/plots/"
+    path = "/dbfs/tmp/plots/"
     compute_paths(X, y, eps, path)
 
     # Log artifacts (output files)
