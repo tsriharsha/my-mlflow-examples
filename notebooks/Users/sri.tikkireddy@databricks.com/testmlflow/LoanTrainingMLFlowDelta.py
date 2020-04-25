@@ -78,8 +78,7 @@ def _fit_crossvalidator(train, features, target, version):
   from mlflow import sklearn as mlflow_sk
   
   with mlflow.start_run():
-    mlflow.log_param("data_version", version)
-    mlflow.log_param("data_path", DELTA_TABLE_DEFAULT_PATH)
+    inject_mlrun_params(mlflow)
     cvModel = crossval.fit(train)
     best_model = cvModel.bestModel
 
