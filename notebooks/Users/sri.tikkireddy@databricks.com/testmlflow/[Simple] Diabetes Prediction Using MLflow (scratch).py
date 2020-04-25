@@ -13,6 +13,16 @@
 
 # COMMAND ----------
 
+def inject_mlrun_params():
+    import json
+    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
+    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
+    mlflow.set_tag("BRANCH", os.environ.get("BRANCH", "notebook_run"))
+    params = json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
+    mlflow.log_params(params)
+
+# COMMAND ----------
+
 # DBTITLE 1,Define SKL Python Function
 import os
 def train_diabetes(in_alpha, in_l1_ratio):
@@ -29,13 +39,8 @@ def train_diabetes(in_alpha, in_l1_ratio):
   # Split the data into training and test sets. (0.75, 0.25) split.
   train_x, train_y, test_x, test_y = split_x_y(data)
       
-  with mlflow.start_run(experiment_id=os.environ.get("EXPERIMENT_ID")):
-    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
-    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
-    mlflow.set_tag("BRANCH", os.environ.get("BRANCH", "notebook_run"))
-    import json
-    params = json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
-    mlflow.log_params(params)
+  with mlflow.start_run():
+    inject_mlrun_params()
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
 
