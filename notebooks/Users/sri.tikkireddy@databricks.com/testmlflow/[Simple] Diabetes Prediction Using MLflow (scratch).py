@@ -20,6 +20,9 @@ def inject_mlrun_params():
     mlflow.set_tag("BRANCH", os.environ.get("BRANCH", "notebook_run"))
     params = json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
     mlflow.log_params(params)
+    
+def get_mlrun_params():
+    return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
 
 # COMMAND ----------
 
