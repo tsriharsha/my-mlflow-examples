@@ -21,10 +21,6 @@ def get_mlrun_params():
 
 # COMMAND ----------
 
-1/0
-
-# COMMAND ----------
-
 def get_latest_version(delta_table_path):
   from delta.tables import DeltaTable  
   delta_table = DeltaTable.forPath(spark, data_path)
