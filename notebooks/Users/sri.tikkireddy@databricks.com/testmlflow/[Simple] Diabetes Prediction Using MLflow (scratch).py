@@ -30,6 +30,8 @@ def train_diabetes(in_alpha, in_l1_ratio):
   train_x, train_y, test_x, test_y = split_x_y(data)
       
   with mlflow.start_run(experiment_id=os.environ.get("EXPERIMENT_ID")):
+    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
+    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
 
