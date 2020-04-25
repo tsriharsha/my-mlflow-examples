@@ -13,7 +13,7 @@
 
 # COMMAND ----------
 
-def inject_mlrun_params():
+def inject_mlrun_params(mlflow):
     import json
     mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
     mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
@@ -43,7 +43,7 @@ def train_diabetes(in_alpha, in_l1_ratio):
   train_x, train_y, test_x, test_y = split_x_y(data)
       
   with mlflow.start_run():
-    inject_mlrun_params()
+    inject_mlrun_params(mlflow)
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
 
