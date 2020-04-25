@@ -13,16 +13,24 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Inject mlrun variables
 def inject_mlrun_params(mlflow):
-    import json
-    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
-    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
-    mlflow.set_tag("BRANCH", os.environ.get("BRANCH", "notebook_run"))
-    params = json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
+  import json
+  if os.environ.get("GIT_REPO", None) != None:
+    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO"))
+  if os.environ.get("COMMIT_HASH", None) != None:
+    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH"))
+  if os.environ.get("GIT_REPO", None) != None:
+    mlflow.set_tag("BRANCH", os.environ.get("BRANCH"))
+  if os.environ.get("PARAMS_JSON_STRING", None) != None:
+    params = json.loads(os.environ.get("PARAMS_JSON_STRING"))
     mlflow.log_params(params)
     
 def get_mlrun_params():
+  if os.environ.get("PARAMS_JSON_STRING", None) != None:
     return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
+  else:
+    return {}
 
 # COMMAND ----------
 
