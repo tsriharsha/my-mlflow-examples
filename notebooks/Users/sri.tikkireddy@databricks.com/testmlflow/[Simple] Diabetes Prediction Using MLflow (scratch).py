@@ -33,6 +33,9 @@ def train_diabetes(in_alpha, in_l1_ratio):
     mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO", "notebook_run"))
     mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH", "notebook_run"))
     mlflow.set_tag("BRANCH", os.environ.get("BRANCH", "notebook_run"))
+    import json
+    params = json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
+    mlflow.log_params(params)
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
 
