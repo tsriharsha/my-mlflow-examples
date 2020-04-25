@@ -112,7 +112,7 @@ def _fit_crossvalidator(train, features, target, version):
 
 # Fit model & display ROC
 features = ["loan_amnt",  "annual_inc", "dti", "delinq_2yrs","total_acc", "credit_length_in_years"]
-glm_model = _fit_crossvalidator(loan_stats, features, target="bad_loan", version=version_to_load)
+glm_model = _fit_crossvalidator(loan_stats, features, target="bad_loan", version=data_version)
 lr_summary = glm_model.stages[len(glm_model.stages)-1].summary
 display(lr_summary.roc)
 
