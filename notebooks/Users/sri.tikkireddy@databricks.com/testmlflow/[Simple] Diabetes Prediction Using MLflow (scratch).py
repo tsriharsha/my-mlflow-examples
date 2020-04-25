@@ -14,6 +14,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Define SKL Python Function
+import os
 def train_diabetes(in_alpha, in_l1_ratio):
   from sklearn.linear_model import ElasticNet
   import mlflow
@@ -28,7 +29,7 @@ def train_diabetes(in_alpha, in_l1_ratio):
   # Split the data into training and test sets. (0.75, 0.25) split.
   train_x, train_y, test_x, test_y = split_x_y(data)
       
-  with mlflow.start_run():
+  with mlflow.start_run(experiment_id=os.environ.get("EXPERIMENT_ID")):
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
 
