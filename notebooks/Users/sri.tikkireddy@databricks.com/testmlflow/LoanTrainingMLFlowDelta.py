@@ -65,34 +65,34 @@ def _fit_crossvalidator(train, features, target, version):
   from mlflow import spark as mlflow_spark
   from mlflow import sklearn as mlflow_sk
   
-  with mlflow.start_run():
-    cvModel = crossval.fit(train)
-    best_model = cvModel.bestModel
+  mlflow.start_run()
+  cvModel = crossval.fit(train)
+  best_model = cvModel.bestModel
 
-    roc = best_model.stages[len(best_model.stages)-1].summary.roc.toPandas()
-    fig1 = plt.figure()
-    fig1.clf()
-    plt.clf()
-    plt.plot(roc['FPR'],roc['TPR'])
-    plt.ylabel('False Positive Rate')
-    plt.xlabel('True Positive Rate')
-    plt.title('ROC Curve')
-    fig1.savefig("roc.png")
-    mlflow.log_artifact("roc.png")
-    fig1.clf()
-    plt.clf()
+  roc = best_model.stages[len(best_model.stages)-1].summary.roc.toPandas()
+  fig1 = plt.figure()
+  fig1.clf()
+  plt.clf()
+  plt.plot(roc['FPR'],roc['TPR'])
+  plt.ylabel('False Positive Rate')
+  plt.xlabel('True Positive Rate')
+  plt.title('ROC Curve')
+  fig1.savefig("roc.png")
+  mlflow.log_artifact("roc.png")
+  fig1.clf()
+  plt.clf()
 
-    lr_summary = best_model.stages[len(best_model.stages)-1].summary
-    mlflow.log_metric("accuracy", lr_summary.accuracy)
-    mlflow.log_metric("weightedFalsePositiveRate", lr_summary.weightedFalsePositiveRate)
-    mlflow.log_metric("weightedFalsePositiveRate", lr_summary.weightedFalsePositiveRate)
-    mlflow.log_metric("weightedFMeasure", lr_summary.weightedFMeasure())
-    mlflow.log_metric("weightedPrecision", lr_summary.weightedPrecision)
-    mlflow.log_metric("weightedRecall", lr_summary.weightedRecall)
-    
-    mlflow_spark.log_model(best_model, "loan-classifier-mllib")
-    
-    return best_model
+  lr_summary = best_model.stages[len(best_model.stages)-1].summary
+  mlflow.log_metric("accuracy", lr_summary.accuracy)
+  mlflow.log_metric("weightedFalsePositiveRate", lr_summary.weightedFalsePositiveRate)
+  mlflow.log_metric("weightedFalsePositiveRate", lr_summary.weightedFalsePositiveRate)
+  mlflow.log_metric("weightedFMeasure", lr_summary.weightedFMeasure())
+  mlflow.log_metric("weightedPrecision", lr_summary.weightedPrecision)
+  mlflow.log_metric("weightedRecall", lr_summary.weightedRecall)
+
+  mlflow_spark.log_model(best_model, "loan-classifier-mllib")
+  mlflow.end_run()
+  return best_model
 
 # COMMAND ----------
 
