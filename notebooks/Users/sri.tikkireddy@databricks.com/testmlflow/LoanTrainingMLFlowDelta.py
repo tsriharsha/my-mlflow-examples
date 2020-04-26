@@ -33,10 +33,10 @@ def log_code(mlflow):
   fileobj = BytesIO(dataBytes)
   gzf = gzip.GzipFile('tmp-name', 'rb', 9, fileobj)
 
-  with tempfile.NamedTemporaryFile() as temp:
+  with tempfile.NamedTemporaryFile(prefix="run_code", suffix=".py") as temp:
     temp.write(gzf.read())
     temp.flush()
-    mlflow.log_artifact(temp.name, artifact_path="run_code.py")
+    mlflow.log_artifact(temp.name)
 #   fd, path = tempfile.mkstemp()
 #   try:
 #       with os.fdopen(fd, 'w') as tmp:
