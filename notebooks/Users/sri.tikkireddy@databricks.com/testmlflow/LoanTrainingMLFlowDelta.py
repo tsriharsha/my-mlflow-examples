@@ -37,7 +37,7 @@ def log_code(mlflow):
       with os.fdopen(fd, 'w') as tmp:
           # do stuff with temp file
           tmp.write(gzf.read().decode("utf-8"))
-      mlflow.log_artifact(fd, artifact_path="run_code.py")
+      mlflow.log_artifact(path, artifact_path="run_code.py")
   finally:
       os.remove(path)
   
