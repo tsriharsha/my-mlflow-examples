@@ -32,14 +32,19 @@ def log_code(mlflow):
   dataBytes = base64.b64decode(data)
   fileobj = BytesIO(dataBytes)
   gzf = gzip.GzipFile('tmp-name', 'rb', 9, fileobj)
-  fd, path = tempfile.mkstemp()
-  try:
-      with os.fdopen(fd, 'w') as tmp:
-          # do stuff with temp file
-          tmp.write(gzf.read().decode("utf-8"))
-      mlflow.log_artifact(path, artifact_path="run_code.py")
-  finally:
-      os.remove(path)
+
+  with tempfile.NamedTemporaryFile() as temp:
+    temp.write(gzf.read().decode("utf-8"))
+    temp.flush()
+    mlflow.log_artifact(temp.name, artifact_path="run_code.py")
+#   fd, path = tempfile.mkstemp()
+#   try:
+#       with os.fdopen(fd, 'w') as tmp:
+#           # do stuff with temp file
+#           tmp.write(gzf.read().decode("utf-8"))
+#       mlflow.log_artifact(path, artifact_path="run_code.py")
+#   finally:
+#       os.remove(path)
   
 
 # COMMAND ----------
