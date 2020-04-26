@@ -1,4 +1,14 @@
 # Databricks notebook source
+def get_mlrun_params():
+  import os
+  import json
+  if os.environ.get("PARAMS_JSON_STRING", None) != None:
+    return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
+  else:
+    return {}
+
+# COMMAND ----------
+
 def get_latest_version(delta_table_path):
   from delta.tables import DeltaTable  
   delta_table = DeltaTable.forPath(spark, data_path)
