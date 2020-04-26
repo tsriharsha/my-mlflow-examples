@@ -18,6 +18,28 @@ def get_mlrun_params():
     return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
   else:
     return {}
+  
+def log_code(mlflow):
+  import gzip
+  from io import StringIO
+  from io import BytesIO
+  import os
+  import tempfile
+  if os.environ.get("RUN_CODE", None) == None:
+    return
+  data = os.environ.get("RUN_CODE")
+  dataBytes = base64.b64decode(data)
+  fileobj = BytesIO(dataBytes)
+  gzf = gzip.GzipFile('tmp-name', 'rb', 9, fileobj)
+  fd, path = tempfile.mkstemp()
+  try:
+      with os.fdopen(fd, 'w') as tmp:
+          # do stuff with temp file
+          tmp.write(gzf.read().decode("utf-8"))
+      mlflow.log_artifact(fd, artifact_path="run_code.py")
+  finally:
+      os.remove(path)
+  
 
 # COMMAND ----------
 
@@ -79,6 +101,7 @@ def _fit_crossvalidator(train, features, target, version):
   
   with mlflow.start_run():
     inject_mlrun_params(mlflow)
+    log_code(mlflow)
     cvModel = crossval.fit(train)
     best_model = cvModel.bestModel
 
