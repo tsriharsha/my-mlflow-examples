@@ -36,16 +36,7 @@ def log_code(mlflow):
   with tempfile.NamedTemporaryFile(prefix="run_code", suffix=".py") as temp:
     temp.write(gzf.read())
     temp.flush()
-    mlflow.log_artifact(temp.name)
-#   fd, path = tempfile.mkstemp()
-#   try:
-#       with os.fdopen(fd, 'w') as tmp:
-#           # do stuff with temp file
-#           tmp.write(gzf.read().decode("utf-8"))
-#       mlflow.log_artifact(path, artifact_path="run_code.py")
-#   finally:
-#       os.remove(path)
-  
+    mlflow.log_artifact(temp.name, artifact_path="code")
 
 # COMMAND ----------
 
