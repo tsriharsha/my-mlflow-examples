@@ -25,6 +25,7 @@ def log_code(mlflow):
   from io import BytesIO
   import os
   import tempfile
+  import base64
   if os.environ.get("RUN_CODE", None) == None:
     return
   data = os.environ.get("RUN_CODE")
