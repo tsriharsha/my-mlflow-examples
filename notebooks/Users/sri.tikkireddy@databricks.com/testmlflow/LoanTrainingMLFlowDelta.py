@@ -1,47 +1,4 @@
 # Databricks notebook source
-def inject_mlrun_params(mlflow):
-  import json
-  if os.environ.get("GIT_REPO", None) != None:
-    mlflow.set_tag("GIT_REPO", os.environ.get("GIT_REPO"))
-  if os.environ.get("COMMIT_HASH", None) != None:
-    mlflow.set_tag("COMMIT_HASH", os.environ.get("COMMIT_HASH"))
-  if os.environ.get("GIT_REPO", None) != None:
-    mlflow.set_tag("BRANCH", os.environ.get("BRANCH"))
-  if os.environ.get("PARAMS_JSON_STRING", None) != None:
-    params = json.loads(os.environ.get("PARAMS_JSON_STRING"))
-    mlflow.log_params(params)
-    
-def get_mlrun_params():
-  import os
-  import json
-  if os.environ.get("PARAMS_JSON_STRING", None) != None:
-    return json.loads(os.environ.get("PARAMS_JSON_STRING", "{}"))
-  else:
-    return {}
-  
-def log_code(mlflow):
-  import gzip
-  from io import StringIO
-  from io import BytesIO
-  import os
-  import tempfile
-  import base64
-  if os.environ.get("RUN_CODE", None) == None:
-    return
-  data = os.environ.get("RUN_CODE")
-  dataBytes = base64.b64decode(data)
-  fileobj = BytesIO(dataBytes)
-  gzf = gzip.GzipFile('tmp-name', 'rb', 9, fileobj)
-
-  with tempfile.NamedTemporaryFile(prefix="run_code", suffix=".py") as temp:
-    temp.write(gzf.read())
-    temp.flush()
-    mlflow.log_artifact(temp.name, artifact_path="code")
-
-
-
-# COMMAND ----------
-
 def get_latest_version(delta_table_path):
   from delta.tables import DeltaTable  
   delta_table = DeltaTable.forPath(spark, data_path)
@@ -99,8 +56,6 @@ def _fit_crossvalidator(train, features, target, version):
   from mlflow import sklearn as mlflow_sk
   
   with mlflow.start_run():
-#     inject_mlrun_params(mlflow)
-#     log_code(mlflow)
     cvModel = crossval.fit(train)
     best_model = cvModel.bestModel
 
