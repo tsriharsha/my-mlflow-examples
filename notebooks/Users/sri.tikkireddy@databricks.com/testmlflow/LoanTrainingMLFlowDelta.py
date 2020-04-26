@@ -38,6 +38,8 @@ def log_code(mlflow):
     temp.flush()
     mlflow.log_artifact(temp.name, artifact_path="code")
 
+
+
 # COMMAND ----------
 
 def get_latest_version(delta_table_path):
@@ -97,8 +99,8 @@ def _fit_crossvalidator(train, features, target, version):
   from mlflow import sklearn as mlflow_sk
   
   with mlflow.start_run():
-    inject_mlrun_params(mlflow)
-    log_code(mlflow)
+#     inject_mlrun_params(mlflow)
+#     log_code(mlflow)
     cvModel = crossval.fit(train)
     best_model = cvModel.bestModel
 
