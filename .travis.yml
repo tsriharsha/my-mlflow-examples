@@ -9,6 +9,7 @@ jobs:
           - echo "HELLO WORLD"
           - echo "notasecret=$NOT_SECRET"
           - echo "secret=$SECRET"
+          - echo "manipulated=test"
           
 
 after_success:
