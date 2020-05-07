@@ -4,7 +4,7 @@ jobs:
     - go: 1.13.x
       script:
           - echo "HELLO WORLD"
-          - echo $SECRET_TEST
+          - echo "${SECRET_TEST}"
 
 after_success:
   - echo "travis go version='$TRAVIS_GO_VERSION'"
